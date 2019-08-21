@@ -63,4 +63,4 @@ class FixedFunctionManager(FunctionManager):
         """
         Returns a list of registered functions, the context is ignored.
         """
-        return self.functions.values()
+        return list(self.functions.values())

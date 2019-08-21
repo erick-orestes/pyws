@@ -1,5 +1,5 @@
 from suds import null
-import unittest2 as unittest
+import unittest
 
 from testcases.base import BaseTestCaseMixin
 

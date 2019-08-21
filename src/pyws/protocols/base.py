@@ -1,4 +1,5 @@
 from pyws.errors import ET_CLIENT
+from six import text_type
 
 __all__ = ('Protocol', )
 
@@ -76,6 +77,6 @@ class Protocol(object):
             'type': error_type_name,
             'name': error_type.__name__,
             'prefix': getattr(error_type, '__module__', ''),
-            'message': unicode(error),
+            'message': text_type(error),
             'params': error.args,
         }

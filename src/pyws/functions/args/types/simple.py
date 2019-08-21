@@ -2,6 +2,7 @@ import re
 
 from datetime import datetime, date, tzinfo, timedelta
 from time import mktime
+from six import string_types, text_type
 
 from pyws.functions.args.types.base import Type
 
@@ -16,16 +17,16 @@ class String(Type):
 
     none_value = ''
 
-    _represents = basestring
+    _represents = string_types
 
     @classmethod
     def _validate(cls, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, string_types):
             raise ValueError(value)
         try:
-            return unicode(value)
+            return text_type(value)
         except UnicodeDecodeError:
-            return unicode(value, 'utf-8')
+            return text_type(value, 'utf-8')
 
 
 class Boolean(Type):
@@ -47,7 +48,7 @@ class Boolean(Type):
 
     @classmethod
     def serialize(cls, value):
-        return unicode(value).lower()
+        return text_type(value).lower()
 
 
 class Integer(Type):

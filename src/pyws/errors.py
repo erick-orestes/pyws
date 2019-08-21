@@ -1,4 +1,5 @@
 from pyws.utils import DefaultStrImplemntationMixin
+from six import text_type
 
 ET_CLIENT = 1
 ET_SERVER = 2
@@ -10,7 +11,7 @@ class Error(DefaultStrImplemntationMixin, Exception):
 
     def __unicode__(self):
         if self.__doc__:
-            return unicode(self.__doc__.strip() % self.args)
+            return text_type(self.__doc__.strip().format(self.args))
         if self.args:
             return self.args[0]
         return 'unknown error'
@@ -22,7 +23,7 @@ class ClientErrorTypeMixin(Exception):
 
 class ConfigurationError(Error):
     def __unicode__(self):
-        return unicode(self.args[0])
+        return text_type(self.args[0])
 
 
 class ServerAlreadyRegistered(ConfigurationError):

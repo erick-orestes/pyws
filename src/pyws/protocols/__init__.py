@@ -1,6 +1,6 @@
 #noinspection PyUnresolvedReferences
-from base import *
+from .base import *
 #noinspection PyUnresolvedReferences
-from rest import *
+from .rest import *
 #noinspection PyUnresolvedReferences
-from soap import *
+from .soap import *

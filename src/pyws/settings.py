@@ -62,7 +62,7 @@ class Settings(object):
             cls = type(self)
         for base in cls.__bases__:
             self.init_slots(base)
-        for key, value in cls.__dict__.iteritems():
+        for key, value in cls.__dict__.items():
             if isinstance(value, Slot):
                 value.attr_name = key
 
@@ -71,7 +71,7 @@ class Settings(object):
             source = source.state
         elif hasattr(source, '__dict__'):
             source = dict(
-                pair for pair in source.__dict__.iteritems()
+                pair for pair in source.__dict__.items()
                     if not pair[0].startswith('__'))
-        for key, value in source.iteritems():
+        for key, value in source.items():
             setattr(self, key, value)

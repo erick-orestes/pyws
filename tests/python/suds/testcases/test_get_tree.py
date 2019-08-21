@@ -1,6 +1,6 @@
-import unittest2 as unittest
+import unittest
 
-from testcases.base import BaseTestCaseMixin
+from .base import BaseTestCaseMixin
 
 
 class GetTreeTestCase(BaseTestCaseMixin, unittest.TestCase):

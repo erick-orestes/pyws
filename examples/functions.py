@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from six.moves import range
 
 from pyws.functions.args import DictOf
 from pyws.functions.register import register
@@ -85,7 +86,7 @@ def add_string_lists(p, q):
         p.extend([''] * (len(q) - len(p)))
     if len(q) < len(p):
         q.extend([''] * (len(p) - len(q)))
-    return list(p[i] + q[i] for i in xrange(len(p)))
+    return list(p[i] + q[i] for i in range(len(p)))
 
 IntegerList = [int, 0]
 
@@ -99,7 +100,7 @@ def add_integer_lists(p, q):
         p.extend([0] * (len(q) - len(p)))
     if len(q) < len(p):
         q.extend([0] * (len(p) - len(q)))
-    return list(p[i] + q[i] for i in xrange(len(p)))
+    return list(p[i] + q[i] for i in range(len(p)))
 
 
 # = trees =====================================================================

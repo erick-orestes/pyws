@@ -161,8 +161,8 @@ class NativeFunctionAdapter(Function):
         # Get argument types
         if not args:
             args = (str,) * len(arg_names)
-        args_ = map(lambda x: x[0] + x[1], zip(arg_names,
-            map(lambda arg: isinstance(arg, tuple) and arg or (arg,), args)))
+        args_ = [x[0] + x[1] for x in zip(arg_names,
+            [isinstance(arg, tuple) and arg or (arg,) for arg in args])]
 
         # Build arguments specification
         self.args = DictOf(self.type_name, *args_)

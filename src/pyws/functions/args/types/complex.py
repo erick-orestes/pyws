@@ -31,10 +31,10 @@ class Dict(Type):
         try:
             dict_name = type_[DICT_NAME_KEY]
         except KeyError:
-            raise BadType('%s is required for Dict type' % repr(DICT_NAME_KEY))
+            raise BadType('{} is required for Dict type'.format(repr(DICT_NAME_KEY)))
         fields = [
             isinstance(type_, tuple) and (name,) + type_ or (name, type_)
-            for name, type_ in type_.iteritems() if name != DICT_NAME_KEY]
+            for name, type_ in type_.items() if name != DICT_NAME_KEY]
         return DictOf(dict_name, *fields)
 
     @classmethod

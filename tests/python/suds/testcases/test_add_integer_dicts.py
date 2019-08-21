@@ -1,7 +1,7 @@
 from suds import null
-import unittest2 as unittest
+import unittest
 
-from testcases.base import BaseTestCaseMixin
+from .base import BaseTestCaseMixin
 
 
 class AddIntegerDictsTestCase(BaseTestCaseMixin, unittest.TestCase):

@@ -1,7 +1,7 @@
 import suds
-import unittest2 as unittest
+import unittest
 
-from testcases.base import BaseTestCaseMixin
+from .base import BaseTestCaseMixin
 
 
 class RaisesExceptionTestCase(BaseTestCaseMixin, unittest.TestCase):
@@ -16,7 +16,7 @@ class RaisesExceptionTestCase(BaseTestCaseMixin, unittest.TestCase):
     def _test_exception(self, message):
         try:
             self.service.say_hello()
-        except suds.WebFault, e:
+        except suds.WebFault as e:
             self.assertEqual(e.fault.faultstring, message)
             return
         self.assertTrue(False, 'Exception hasn\'t been thrown')

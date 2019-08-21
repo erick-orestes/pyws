@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import unittest2 as unittest
+import unittest
 
 from suds import null
 
@@ -23,4 +23,4 @@ class AddSimpleTestCase(BaseTestCaseMixin, unittest.TestCase):
 
     def test_unicode(self):
         self.assertEqual(
-            self.service.add_simple('hello', u' лопата'), u'hello лопата')
+            self.service.add_simple('hello', ' лопата'), 'hello лопата')

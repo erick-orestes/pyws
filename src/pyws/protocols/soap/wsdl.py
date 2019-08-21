@@ -172,7 +172,7 @@ class WsdlGenerator(object):
 
         self._add_functions()
 
-        for type in self.types.itervalues():
+        for type in self.types.values():
             self.schema_types.append(type)
 
         self.definitions.append(self.port_type)

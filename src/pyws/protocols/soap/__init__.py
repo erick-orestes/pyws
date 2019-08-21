@@ -1,5 +1,6 @@
 import itertools as it
 import re
+from six import text_type
 
 from functools import partial
 from lxml import etree as et
@@ -10,8 +11,8 @@ from pyws.response import Response
 from pyws.protocols.base import Protocol
 from pyws.utils import ENCODING
 
-from utils import *
-from wsdl import WsdlGenerator
+from .utils import *
+from .wsdl import WsdlGenerator
 
 TAG_NAME_RE = re.compile('{(.*?)}(.*)')
 
@@ -34,7 +35,7 @@ def xml2obj(xml, schema):
     if not children:
         if xml.text is None:
             return None
-        return unicode(xml.text)
+        return text_type(xml.text)
     if issubclass(schema, List):
         return [xml2obj(child, schema.element_type) for child in children]
     if issubclass(schema, Dict):
@@ -47,7 +48,7 @@ def xml2obj(xml, schema):
                     'XML doesn\'t match the required schema. '
                     '{%s}%s is unexpected under %s, '
                     'must be one of: %s' % (
-                        ns, name, xml.tag, ', '.join(schema.iterkeys())
+                        ns, name, xml.tag, ', '.join(iter(schema.keys()))
                     ))
             obj = xml2obj(child, schema[name])
             if name not in result:
@@ -71,7 +72,7 @@ def obj2xml(root, contents, schema=None, namespace=None):
         # Return the fields of the dict in schema order,
         # or arbitrary python dict order if no schema
         field_order = \
-            schema and [f.name for f in schema.fields] or contents.keys()
+            schema and [f.name for f in schema.fields] or list(contents.keys())
         for name in field_order:
             element = et.SubElement(root, name, **kwargs)
             obj2xml(element, contents.get(name), fields.get(name), namespace)
@@ -209,7 +210,7 @@ class SoapProtocol(Protocol):
 
         request.parsed_data.xml = xml
         request.parsed_data.func_xml = func
-        request.parsed_data.func_name = func_name
+        request.parsed_data.__name__ = func_name
 
         return request.parsed_data
 
@@ -218,7 +219,7 @@ class SoapProtocol(Protocol):
         if request.tail == 'wsdl':
             return partial(self.get_wsdl, rpc=bool(request.GET.get('rpc')))
 
-        return self.parse_request(request).func_name
+        return self.parse_request(request).__name__
 
     def get_arguments(self, request, arguments):
         return xml2obj(self.parse_request(request).func_xml, arguments) or {}

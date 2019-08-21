@@ -3,9 +3,9 @@
 import sys
 
 import suds
-import unittest2 as unittest
+import unittest
 
-from testcases.base import BaseTestCaseMixin
+from .base import BaseTestCaseMixin
 
 
 class RaisesExceptionTestCase(BaseTestCaseMixin, unittest.TestCase):
@@ -13,7 +13,7 @@ class RaisesExceptionTestCase(BaseTestCaseMixin, unittest.TestCase):
     def test_simple(self):
         try:
             self.service.raises_exception('hello')
-        except suds.WebFault, e:
+        except suds.WebFault as e:
             self.assertEqual(e.fault.faultstring, 'hello error')
             return
         self.assertTrue(False, 'Exception hasn\'t been thrown')
@@ -23,8 +23,8 @@ class RaisesExceptionTestCase(BaseTestCaseMixin, unittest.TestCase):
         'suds does not handle unicode in faultstrings properly on python 2.5')
     def test_unicode(self):
         try:
-            self.service.raises_exception(u'лопата')
-        except suds.WebFault, e:
-            self.assertEqual(e.fault.faultstring, u'лопата error')
+            self.service.raises_exception('лопата')
+        except suds.WebFault as e:
+            self.assertEqual(e.fault.faultstring, 'лопата error')
             return
         self.assertTrue(False, 'Exception hasn\'t been thrown')

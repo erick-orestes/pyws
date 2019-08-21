@@ -1,5 +1,5 @@
 __all__ = ('Type', )
-
+from six import text_type
 
 class Type(object):
 
@@ -31,6 +31,6 @@ class Type(object):
     @classmethod
     def serialize(cls, value):
         try:
-            return unicode(value)
+            return text_type(value)
         except UnicodeDecodeError:
-            return unicode(value, 'utf-8')
+            return text_type(value, 'utf-8')

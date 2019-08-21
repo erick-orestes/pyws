@@ -1,17 +1,19 @@
 from pyws.utils import json
 
-from urllib import urlencode
-from urllib2 import urlopen, HTTPError, Request
+from urllib.parse import urlencode
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 
 
-def encode_arg((name, value)):
+def encode_arg(xxx_todo_changeme):
+    (name, value) = xxx_todo_changeme
     if isinstance(value, (list, tuple)):
         return '&'.join(urlencode({name: element}) for element in value)
     return urlencode({name: value})
 
 
 def encode_args(args):
-    return '&'.join(map(encode_arg, args.iteritems()))
+    return '&'.join(map(encode_arg, iter(args.items())))
 
 
 def make_rest_call(func, headers=None, **args):
@@ -21,5 +23,5 @@ def make_rest_call(func, headers=None, **args):
     )
     try:
         return json.loads(urlopen(request).read())['result']
-    except HTTPError, e:
+    except HTTPError as e:
         raise Exception(json.loads(e.read())['error']['message'])

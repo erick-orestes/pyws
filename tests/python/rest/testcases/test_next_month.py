@@ -1,6 +1,6 @@
-import unittest2 as unittest
+import unittest
 
-from client import make_rest_call
+from ..client import make_rest_call
 
 
 class NextMonthTestCase(unittest.TestCase):

@@ -6,6 +6,6 @@ include $(TEST_DIR)/Makefile.common
 build_local:
 
 test:
-	unit2 discover -t . -s testcases -p '*.py'
+	python -m unittest discover -t . -s testcases -p '*.py'
 
 clean_local:

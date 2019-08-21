@@ -2,7 +2,7 @@ from lxml import etree as et
 
 from pyws.functions import args
 
-from utils import *
+from .utils import *
 
 
 class UnknownType(Exception):

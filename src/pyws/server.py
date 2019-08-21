@@ -1,16 +1,19 @@
-from __future__ import with_statement
+
 
 import logging
 import traceback
+from six import text_type
 
 from pyws.errors import Error, BadProtocol, FunctionNotFound, ProtocolError, \
     ProtocolNotFound, ET_CLIENT, ET_SERVER, ServerAlreadyRegistered, \
     ConfigurationError, NoProtocolsRegistered, DefaultServerAlreadyRegistered
 from pyws.functions.managers import FixedFunctionManager
-from pyws.protocols import Protocol, SoapProtocol
+from pyws.protocols.base import Protocol
+from pyws.protocols.soap import SoapProtocol
 from pyws.response import Response
 from pyws.settings import Settings
 from pyws.utils import ENCODING
+from functools import reduce
 
 logger = logging.getLogger('pyws')
 
@@ -32,7 +35,7 @@ class ContextManager(object):
     def __enter__(self):
         try:
             self.context = self.enter(self.context_data)
-        except Exception, e:
+        except Exception as e:
             self.context = e
         return self.context
 
@@ -98,7 +101,7 @@ class Server(object):
             raise NoProtocolsRegistered()
 
         if len(self.protocols) == 1:
-            name, tail = self.protocols.keys()[0], request.tail
+            name, tail = next(iter(self.protocols)), request.tail
         else:
             parts = request.tail.split('/', 1)
             name, tail = parts[0], (len(parts) > 1 and parts[1] or '')
@@ -152,8 +155,8 @@ class Server(object):
 
         try:
             protocol = self.get_protocol(request)
-        except ProtocolError, e:
-            return Response(unicode(e).encode(ENCODING))
+        except ProtocolError as e:
+            return Response(text_type(e).encode(ENCODING))
 
         try:
 
@@ -184,10 +187,10 @@ class Server(object):
                 raise
             response = protocol.get_error_response(
                 Error('Internal server error occured'))
-        except Error, e:
+        except Error as e:
             logger.error(traceback.format_exc())
             response = protocol.get_error_response(e)
-        except Exception, e:
+        except Exception as e:
             logger.error(traceback.format_exc())
             client_error = hasattr(e, '__module__') or type(e) == Exception
             if not client_error and self.settings.DEBUG:

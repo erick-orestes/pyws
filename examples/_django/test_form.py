@@ -1,4 +1,4 @@
-import urlparse
+import urllib.parse
 
 from django.http import HttpRequest
 from django.shortcuts import render_to_response

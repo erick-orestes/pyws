@@ -21,19 +21,21 @@ long_description = \
 
 extra_requires = []
 minor_version = sys.version_info[1]
-if minor_version < 5:
-    raise Exception('pyws works only on python >= 2.5')
-elif minor_version == 5:
-    extra_requires += ['simplejson', 'ssl']
-
+major_version = sys.version_info[0]
+if major_version < 3 and minor_version < 7:
+    raise Exception('pyws works only on python >= 2.7')
+find_pack = find_packages('src')
 if 'develop' in sys.argv:
-    extra_requires += ['unittest2', 'suds']
-
+    if major_version < 3:
+        extra_requires += ['suds']
+        find_pack = find_packages()
+    else:
+        extra_requires += ['suds-py3']
 setup(
     name='pyws',
     version=pyws.VERSION,
     package_dir={'': 'src'},
-    packages=find_packages('src'),
+    packages=find_pack,
     description=short_description,
     long_description=long_description,
     keywords=['soap', 'wsdl', 'server', 'xml', 'json', 'web services'],
@@ -42,5 +44,5 @@ setup(
     url='https://github.com/stepank/pyws',
     license='MIT',
     platforms=['Any'],
-    install_requires=['lxml'] + extra_requires,
+    install_requires=['lxml', 'six'] + extra_requires,
 )
