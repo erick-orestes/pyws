@@ -1,3 +1,5 @@
+from six.moves import filter
+
 WSDL_NS     = 'http://schemas.xmlsoap.org/wsdl/'
 SOAP_NS     = 'http://schemas.xmlsoap.org/wsdl/soap/'
 SOAP_ENV_NS = 'http://schemas.xmlsoap.org/soap/envelope/'
@@ -8,8 +10,13 @@ def qname(name, ns=None, namespaces=None):
         return name
     if not namespaces:
         return '{%s}%s' % (ns, name)
-    prefix = filter(lambda x: x[1] == ns, iter(namespaces.items()))[0][0]
-    return '%s:%s' % (prefix, name)
+    for key, value in namespaces.items():
+        if value == ns:
+            return '%s:%s' % (key, name)
+    #FIXME This raise is to be compliant with the old logic.
+    # If there is no match the old code raise IndexError so we are doing the same.
+    # In future versions this could improve.
+    raise IndexError("There is no match of {} in {}".format(ns, namespaces))
 
 def wsdl_name(name):
     return qname(name, WSDL_NS)

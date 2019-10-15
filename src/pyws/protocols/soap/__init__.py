@@ -1,4 +1,3 @@
-import itertools as it
 import re
 from six import text_type
 
@@ -87,9 +86,9 @@ def get_axis_package_name(ns):
     mo = re.search('https?://([\\w\\.-]+).*?/(.*)', ns)
     if not mo:
         raise ConfigurationError('No domain in service namespace')
-    res = list(reversed(mo.group(1).split('.')))
-    return '.'.join(it.ifilter(lambda s: s, it.imap(
-        lambda s: re.sub('[^\w]', '_', s), res + mo.group(2).split('/'))))
+    res = mo.group(1).split('.')
+    res.reverse()
+    return '.'.join((re.sub('[^\w]', '_', s) for s in res + mo.group(2).split('/') if s))
 
 
 def get_context_data_from_headers(request, headers_schema):
